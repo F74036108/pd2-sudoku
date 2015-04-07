@@ -7,5 +7,8 @@ public:
   void Solve();
   static const int sudokuSize=144;
 private:
-  int map[sudokuSize];
+  int mapQue[sudokuSize];
+  int mapIn[sudokuSize];
+  int x[10];
+  int a,b,c,d,e,f,g,h,i,j;
 };
