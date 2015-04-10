@@ -43,7 +43,7 @@ void Sudoku::GiveQuestion()
                            h, i, g, c, d, b, a, e, f,-1,-1,-1,
                            b, c, d, f, a, e, g, h, i,-1,-1,-1
                          };
-  static int mapQue[sudokuSize]={ i, g, h,-1,-1,-1, c, a, b, f, d, e,
+  int mapQue[sudokuSize]={ i, g, h,-1,-1,-1, c, a, b, f, d, e,
                            c, a, 0,-1,-1,-1, f, d, e, i, g, h,
                            f, 0, 0,-1,-1,-1, i, g, h, c, a, b,
                            g, h, i, a, b, c,-1,-1,-1, 0, e, f,
@@ -69,15 +69,13 @@ void Sudoku::GiveQuestion()
 }
 void Sudoku::ReadIn()
 {
-  //int a;
+
   for(int i=0;i<sudokuSize;i++){
-    mapIn[i]=mapQue[i];
-  // if(a!='\n')
-    // mapIn[i]=a;
- //
-  }int ii;ii=0;
+    cin>>mapIn[i];
+  }
+  int ii; ii=0;
     for(j=0;j<sudokuSize;j++){
-    cout<<setw(4)<<mapQue[j];
+    cout<<setw(4)<<mapIn[j];
     ii++;
     if(ii==12){
       cout<<'\n';ii=0;}
