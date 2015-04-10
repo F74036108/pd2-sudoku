@@ -67,12 +67,18 @@ void Sudoku::GiveQuestion()
   cout<<endl;
   return;
 }
+void Sudoku::setMap(const int map[])
+{
+  for(int i=0;i<sudokuSize;i++)
+    mapIn[i]=map[i];
+}
 void Sudoku::ReadIn()
 {
 
   for(int i=0;i<sudokuSize;i++){
     cin>>mapIn[i];
   }
+
   int ii; ii=0;
     for(j=0;j<sudokuSize;j++){
     cout<<setw(4)<<mapIn[j];
@@ -83,4 +89,66 @@ void Sudoku::ReadIn()
   cout<<endl;
 
 }
-void Sudoku::Solve(){}
+void Sudoku::insPossible(int a[], int *b)
+{
+  int Count[11];
+  for(int i=0;i<11;i++){
+    Count[i]=0;
+  }
+  for(int i=0;i<12;i++){
+    Count[a[i]+1]=1;
+  }
+  b=Count;
+}
+void Sudoku::setElement(int matNum, int value)
+{
+  mapIn[matNum]=value;
+}
+int Sudoku::getZero()
+{
+  for(int i=0;i<sudokuSize;i++)
+    if(mapIn[i]==0)
+      return i;
+    return -1;
+}
+int Sudoku::checkDark()
+{
+  int REC[sudokuSize];
+  for(int i=0;i<sudokuSize;i++){
+    REC[i]=-2;
+  }
+  int c;c=0;
+  for(int i=0;i<sudokuSize;i++){
+    if(mapIn[i]==-1){
+      REC[c]=i;c++;
+    }
+  }cout<<c<<endl;
+  int ii; ii=0;
+    for(j=0;j<sudokuSize;j++){
+    cout<<setw(4)<<mapIn[j];
+    ii++;
+    if(ii==12){
+      cout<<'\n';ii=0;}
+  }
+  cout<<endl;
+
+  if(c>36){return -1;}
+  for(int i=0;i<c;i+=9){
+    if(REC[i]!=REC[i+1]-1&&REC[i]!=REC[i+2]-2&&REC[i]!=REC[i+3]-12&&REC[i]!=REC[i+4]-13&&REC[i]!=REC[i+5]-14&&REC[i]!=REC[i+6]-24&&REC[i]!=REC[i+7]-25&&REC[i]!=REC[i+8]-26){
+      return -1;
+    }
+  }
+  return 1;
+}
+void Sudoku::Solve()
+{
+ 
+  int blankPosition;
+  
+  if(checkDark()==-1)
+    cout<<0<<endl;return;
+
+  blankPosition=getZero();
+ // if(blankPosition==-1){
+   // if
+}
