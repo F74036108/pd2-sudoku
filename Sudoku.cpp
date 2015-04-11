@@ -67,7 +67,7 @@ void Sudoku::GiveQuestion()
   cout<<endl;
   return;
 }
-void Sudoku::setMap(const int map[])
+void Sudoku::cloneMap(const int map[])
 {
   for(int i=0;i<sudokuSize;i++)
     mapIn[i]=map[i];
@@ -78,7 +78,7 @@ void Sudoku::ReadIn()
   for(int i=0;i<sudokuSize;i++){
     cin>>mapIn[i];
   }
-
+  cout<<"readin check"<<endl;
   int ii; ii=0;
     for(j=0;j<sudokuSize;j++){
     cout<<setw(4)<<mapIn[j];
@@ -89,16 +89,43 @@ void Sudoku::ReadIn()
   cout<<endl;
 
 }
-void Sudoku::insPossible(int a[], int *b)
+bool Sudoku::checkUnity(int a[],int b)
 {
-  int Count[11];
+  int arr[11];//count
+  
+  for(int i=0;i<11;i++)
+    arr[i]=0;
+  for(int i=0;i<=b;i++)
+    ++arr[a[i]+1];
+  if(arr[0]==9){
+    return true;}
+  if(b==11){
+    if(arr[0]!=3)
+      return false;
+  }
+  for(int i=2;i<11;i++){
+    if(arr[i]!=1){
+      cout<<"SHIT"<<endl;
+      return false;
+    }
+  }
+ // cout<<"What"<<endl;
+  return true;  
+}
+int * Sudoku::insPossible(int blank)//Check Possible Ans for blanks
+{
+//  int Count[11];
+  /*int i;
+  i=(blank/12);
   for(int i=0;i<11;i++){
     Count[i]=0;
   }
-  for(int i=0;i<12;i++){
-    Count[a[i]+1]=1;
-  }
-  b=Count;
+  for(int j=0;j<12;j++)
+    Count[mapIn[i*12+j]+1]=1;
+  for(int j=0;j<12;j++)
+    Count[mapIn[blank+12*j]+1]=1;
+
+  return Count;*/
 }
 void Sudoku::setElement(int matNum, int value)
 {
@@ -123,6 +150,7 @@ int Sudoku::checkDark()
       REC[c]=i;c++;
     }
   }cout<<c<<endl;
+  cout<<"for dark"<<endl;
   int ii; ii=0;
     for(j=0;j<sudokuSize;j++){
     cout<<setw(4)<<mapIn[j];
@@ -140,15 +168,134 @@ int Sudoku::checkDark()
   }
   return 1;
 }
-void Sudoku::Solve()
+bool Sudoku::Correct()
 {
- 
-  int blankPosition;
+  bool checkResult;
+  int checkArr[12], location;
+  for(int i=0;i<sudokuSize;i+=12)//RowCheck
+  {
+    for(int j=0;j<12;j++)
+      checkArr[j]=mapIn[i+j];
+    checkResult=checkUnity(checkArr,11);
+    if(checkResult==false){
+      return false;
+    }
+  }
+  for(int i=0;i<12;i++)//Column check
+  {
+    for(int j=0;j<12;j++)
+      checkArr[j]=mapIn[i+12*j];
+    checkResult=checkUnity(checkArr,11);
+    if(checkResult==false){
+      return false;}
+  }
+  int checkArr2[9];
+  for(int i=0;i<16;i++)//Cell check
+  {
+    for(int j=0;j<9;j++)
+    {
+    location= 36*(i/4)+3*(i%4)+12*(j/3)+(j%3);
+    checkArr2[j]=mapIn[location];
+    }
+    checkResult=checkUnity(checkArr2, 8);
+    if(checkResult==false)
+      return false;
+  }
+  return true;
+}
+bool Sudoku::Solve()
+{
   
-  if(checkDark()==-1)
-    cout<<0<<endl;return;
+  int blankPosition;
+  int *exclude;  
+  /*if(checkDark()==-1){
+    cout<<0<<endl;return false;
+  }*/
 
   blankPosition=getZero();
- // if(blankPosition==-1){
-   // if
+  cout<<blankPosition<<"test"<<endl;
+/*  int Count[11];
+  int ia;
+  ia=(blankPosition/12);
+  for(int ii=0;ii<11;ii++){
+    Count[ii]=0;
+  }
+  for(int jj=0;jj<12;jj++){
+    Count[mapIn[ia*12+jj]+1]=1;
+  
+//    Count[mapIn[blankPosition+12*jj]+1]=1;
+  }cout<<"te23"<<endl;
+*/
+//  for(int i=0;i<11;i++){
+//  cout<<Count[i]<<endl;}
+  if(blankPosition==-1)
+  {
+    if(Correct())
+    {
+      cout<<1<<endl;
+      int ii; ii=0;
+      cout<<"for correct"<<endl;
+      for(j=0;j<sudokuSize;j++){
+        cout<<setw(4)<<mapIn[j];
+        ii++;
+        if(ii==12){
+          cout<<'\n';ii=0;}
+      }
+      cout<<endl;
+     // return true;
+      exit(1);
+     
+    }
+    else
+    {/*
+      int ii; ii=0;
+
+      for(j=0;j<sudokuSize;j++){
+        cout<<setw(4)<<mapIn[j];
+        ii++;
+        if(ii==12){
+          cout<<'\n';ii=0;}
+      }
+      cout<<",,,,"<<endl;
+ */
+      return false;
+    }
+  }
+  else
+  {
+    for(int num=1;num<=9;num++)
+    {
+int Count[11];
+  int ia;
+  ia=(blankPosition/12);
+  for(int ii=0;ii<11;ii++){
+    Count[ii]=0;
+  }
+  for(int jj=0;jj<12;jj++){
+    Count[mapIn[ia*12+jj]+1]=1;
+    Count[mapIn[blankPosition%12+12*jj]+1]=1;
+  }
+  
+
+      if(Count[num+1]!=1)
+      {
+        setElement(blankPosition,num);
+     /* int ii; ii=0;
+     
+      for(j=0;j<sudokuSize;j++){
+        cout<<setw(4)<<mapIn[j];
+        ii++;
+        if(ii==12){
+          cout<<'\n';ii=0;}
+      }
+      cout<<endl;
+*/
+        if(Solve()){
+          cout<<"REALLY"<<endl;
+          return true;}
+        setElement(blankPosition,0);
+      }
+    }
+    return false;
+  }
 }

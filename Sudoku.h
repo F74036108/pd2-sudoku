@@ -4,15 +4,20 @@ public:
   Sudoku();
   void GiveQuestion();
   void ReadIn();
-  void setMap(const int map[]);
-  void insPossible(int *,int*);
+  void cloneMap(const int map[]);
+  bool checkUnity(int *,int);
+  int * insPossible(int);
   void setElement(int , int);
   int getZero();
   int checkDark();
-  void Solve();
+  bool Correct();
+  bool Solve();
   static const int sudokuSize=144;
 private:
   int mapIn[sudokuSize];
+  int mapOri[sudokuSize];
+  int exclude[11];
+//  int Count[11];
 //static  int mapQue[sudokuSize];
   int mapAns[sudokuSize];
   int x[10];
