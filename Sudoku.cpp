@@ -5,9 +5,11 @@
 using namespace std;
 Sudoku::Sudoku()
 {
+  passCount=0;
   for(int i=0;i<sudokuSize;i++){
    
     mapIn[i]=0;
+    testMulti[i]=0;
   }
 }
 void Sudoku::GiveQuestion()
@@ -77,14 +79,7 @@ void Sudoku::ReadIn()
 
   for(int i=0;i<sudokuSize;i++){
     cin>>mapIn[i];
-  }
-  cout<<"readin check"<<endl;
-  int ii; ii=0;
-    for(j=0;j<sudokuSize;j++){
-    cout<<setw(4)<<mapIn[j];
-    ii++;
-    if(ii==12){
-      cout<<'\n';ii=0;}
+    testMulti[sudokuSize-i-1]=mapIn[i];
   }
   cout<<endl;
 
@@ -105,7 +100,6 @@ bool Sudoku::checkUnity(int a[],int b)
   }
   for(int i=2;i<11;i++){
     if(arr[i]!=1){
-      cout<<"SHIT"<<endl;
       return false;
     }
   }
@@ -207,13 +201,12 @@ bool Sudoku::Solve()
 {
   
   int blankPosition;
-  int *exclude;  
+  
   /*if(checkDark()==-1){
     cout<<0<<endl;return false;
   }*/
 
   blankPosition=getZero();
-  cout<<blankPosition<<"test"<<endl;
 /*  int Count[11];
   int ia;
   ia=(blankPosition/12);
@@ -231,20 +224,49 @@ bool Sudoku::Solve()
   if(blankPosition==-1)
   {
     if(Correct())
-    {
-      cout<<1<<endl;
+    {/*
+  i    cout<<1<<endl;
       int ii; ii=0;
-      cout<<"for correct"<<endl;
       for(j=0;j<sudokuSize;j++){
-        cout<<setw(4)<<mapIn[j];
+        cout<<mapIn[j]<<" ";
         ii++;
         if(ii==12){
           cout<<'\n';ii=0;}
       }
-      cout<<endl;
-     // return true;
-      exit(1);
-     
+      cout<<endl;*/
+      if(passCount==0){
+      for(int i=0;i<sudokuSize;i++){
+        mapAnswer[i]=mapIn[i];
+        mapIn[i]=testMulti[i];
+      }}
+       ++passCount;
+      if(passCount<2){
+      Solve();cout<<"one"<<endl;
+      
+      int c;c=0;
+      for(int i=0;i<sudokuSize;i++){
+        if(mapIn[i]==mapAnswer[sudokuSize-1-i]){
+          c++;
+        }
+      }
+      if(c==sudokuSize){
+        cout<<1<<endl;
+        int ii; ii=0;
+        for(j=0;j<sudokuSize;j++){
+          cout<<mapAnswer[j]<<" ";
+          ii++;
+          if(ii==12){
+            cout<<'\n';ii=0;}
+        }
+        cout<<endl;
+      }else{
+        cout<<2<<endl;
+        return true;
+      }
+      }
+
+    
+    // return true; 
     }
     else
     {/*
@@ -256,25 +278,29 @@ bool Sudoku::Solve()
         if(ii==12){
           cout<<'\n';ii=0;}
       }
-      cout<<",,,,"<<endl;
- */
+      cout<<",,,,"<<endl;*/
+    if(passCount==2)
+   cout<<0<<"here"<<passCount<<endl;
       return false;
     }
   }
   else
-  {
-    for(int num=1;num<=9;num++)
+  { 
+
+   if(passCount==1){
+
+    for(int num=9;num>=1;num--)
     {
-int Count[11];
-  int ia;
-  ia=(blankPosition/12);
-  for(int ii=0;ii<11;ii++){
-    Count[ii]=0;
-  }
-  for(int jj=0;jj<12;jj++){
-    Count[mapIn[ia*12+jj]+1]=1;
-    Count[mapIn[blankPosition%12+12*jj]+1]=1;
-  }
+      int Count[11];
+      int ia;
+      ia=(blankPosition/12);
+      for(int ii=0;ii<11;ii++){
+        Count[ii]=0;
+      }
+      for(int jj=0;jj<12;jj++){
+        Count[mapIn[ia*12+jj]+1]=1;
+        Count[mapIn[blankPosition%12+12*jj]+1]=1;
+      }
   
 
       if(Count[num+1]!=1)
@@ -291,11 +317,43 @@ int Count[11];
       cout<<endl;
 */
         if(Solve()){
-          cout<<"REALLY"<<endl;
           return true;}
         setElement(blankPosition,0);
       }
     }
-    return false;
+   }else{
+    for(int num=1;num<=9;num++)
+    {
+      int Count[11];
+      int ia;
+      ia=(blankPosition/12);
+      for(int ii=0;ii<11;ii++){
+        Count[ii]=0;
+      }
+      for(int jj=0;jj<12;jj++){
+        Count[mapIn[ia*12+jj]+1]=1;
+        Count[mapIn[blankPosition%12+12*jj]+1]=1;
+      }
+      if(Count[num+1]!=1)
+      {
+        setElement(blankPosition,num);
+     /* int ii; ii=0;
+
+      for(j=0;j<sudokuSize;j++){
+        cout<<setw(4)<<mapIn[j];
+        ii++;
+        if(ii==12){
+          cout<<'\n';ii=0;}
+      }
+      cout<<endl;
+*/
+        if(Solve()){
+          return true;}
+        setElement(blankPosition,0);
+      }
+    }
+   }
+
+   return false;
   }
 }

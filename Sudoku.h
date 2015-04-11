@@ -15,11 +15,13 @@ public:
   static const int sudokuSize=144;
 private:
   int mapIn[sudokuSize];
-  int mapOri[sudokuSize];
+  int testMulti[sudokuSize];
   int exclude[11];
+  int passCount;
 //  int Count[11];
 //static  int mapQue[sudokuSize];
   int mapAns[sudokuSize];
+  int mapAnswer[sudokuSize];
   int x[10];
   int a,b,c,d,e,f,g,h,i,j,jj;
 };
