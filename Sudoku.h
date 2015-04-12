@@ -8,7 +8,6 @@ public:
   bool checkUnity(int *,int);
   void setElement(int , int);
   int getZero();
-  int checkDark();
   bool Correct();
   bool Solve();
   static const int sudokuSize=144;
@@ -16,9 +15,6 @@ private:
   int mapIn[sudokuSize];
   int testMulti[sudokuSize];
   int passCount;
-  int ansCount;
-//  int Count[11];
-//static  int mapQue[sudokuSize];
   int mapAns[sudokuSize];
   int mapAnswer[sudokuSize];
   int x[10];

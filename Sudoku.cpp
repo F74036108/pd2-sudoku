@@ -14,7 +14,7 @@ Sudoku::Sudoku()
 }
 void Sudoku::GiveQuestion()
 {
-
+  //Generate a to i randomly
   srandom(time(NULL));
   x[0]=0;
   bool ch[10];
@@ -58,7 +58,7 @@ void Sudoku::GiveQuestion()
                            h, i, 0, 0, 0, 0, a, 0, 0,-1,-1,-1,
                            0, c, d, 0, 0, 0, 0, h, i,-1,-1,-1
                          };
-
+//Print out question
   i=0;
   for(j=0;j<sudokuSize;j++){
     cout<<mapQue[j]<<" ";
@@ -84,6 +84,7 @@ void Sudoku::ReadIn()
   cout<<endl;
 
 }
+//Check if 1 to 9 only show once
 bool Sudoku::checkUnity(int a[],int b)
 {
   int arr[11];//count
@@ -109,6 +110,8 @@ void Sudoku::setElement(int matNum, int value)
 {
   mapIn[matNum]=value;
 }
+//Get the position of 0s, 
+//return -1 if there isn't any
 int Sudoku::getZero()
 {
   for(int i=0;i<sudokuSize;i++)
@@ -116,36 +119,7 @@ int Sudoku::getZero()
       return i;
     return -1;
 }
-int Sudoku::checkDark()
-{
-  int REC[sudokuSize];
-  for(int i=0;i<sudokuSize;i++){
-    REC[i]=-2;
-  }
-  int c;c=0;
-  for(int i=0;i<sudokuSize;i++){
-    if(mapIn[i]==-1){
-      REC[c]=i;c++;
-    }
-  }cout<<c<<endl;
-  cout<<"for dark"<<endl;
-  int ii; ii=0;
-    for(j=0;j<sudokuSize;j++){
-    cout<<setw(4)<<mapIn[j];
-    ii++;
-    if(ii==12){
-      cout<<'\n';ii=0;}
-  }
-  cout<<endl;
-
-  if(c>36){return -1;}
-  for(int i=0;i<c;i+=9){
-    if(REC[i]!=REC[i+1]-1&&REC[i]!=REC[i+2]-2&&REC[i]!=REC[i+3]-12&&REC[i]!=REC[i+4]-13&&REC[i]!=REC[i+5]-14&&REC[i]!=REC[i+6]-24&&REC[i]!=REC[i+7]-25&&REC[i]!=REC[i+8]-26){
-      return -1;
-    }
-  }
-  return 1;
-}
+//Check if it sticks to the sudoku rule
 bool Sudoku::Correct()
 {
   bool checkResult;
@@ -181,6 +155,7 @@ bool Sudoku::Correct()
   }
   return true;
 }
+//Solve out the zero positions
 bool Sudoku::Solve()
 {
   
@@ -195,51 +170,39 @@ bool Sudoku::Solve()
   if(blankPosition==-1)
   {
     if(Correct())
-    {/*
-      cout<<1<<endl;
-      int ii; ii=0;
-      for(j=0;j<sudokuSize;j++){
-        cout<<mapIn[j]<<" ";
-        ii++;
-        if(ii==12){
-          cout<<'\n';ii=0;}
-      }
-      cout<<endl;*/
-      
+    {      
       if(passCount==0){
-      for(int i=0;i<sudokuSize;i++){
-        mapAnswer[i]=mapIn[i];
-        mapIn[i]=testMulti[i];
-      }}
-       ++passCount;
+        for(int i=0;i<sudokuSize;i++){
+          mapAnswer[i]=mapIn[i];
+          mapIn[i]=testMulti[i];
+        }
+      }
+      ++passCount;
       if(passCount<2){
-      Solve();
+        Solve();
       
-      int c;c=0;
-      for(int i=0;i<sudokuSize;i++){
-        if(mapIn[i]==mapAnswer[i]){
-          c++;
+        int c;c=0;
+        for(int i=0;i<sudokuSize;i++){
+          if(mapIn[i]==mapAnswer[i]){
+            c++;
+          }
+        }
+        if(c==sudokuSize){
+          cout<<1<<endl;
+          int ii; ii=0;
+          for(j=0;j<sudokuSize;j++){
+            cout<<mapAnswer[j]<<" ";
+            ii++;
+            if(ii==12){
+              cout<<'\n';ii=0;}
+          }
+          cout<<endl;
+          return true;
+        }else{
+          cout<<2<<endl;
+          return true;
         }
       }
-      if(c==sudokuSize){
-        cout<<1<<endl;
-        int ii; ii=0;
-        for(j=0;j<sudokuSize;j++){
-          cout<<mapAnswer[j]<<" ";
-          ii++;
-          if(ii==12){
-            cout<<'\n';ii=0;}
-        }
-        cout<<endl;
-        return true;
-      }else{
-        cout<<2<<endl;
-        return true;
-      }
-      }
-
-    
-    // return true; 
     }
     else
     {
@@ -250,10 +213,12 @@ bool Sudoku::Solve()
   else
   { 
 
-  if(passCount>=1){
+    if(passCount>=1){
 
-    for(int num=9;num>=1;num--)
-    {
+     for(int num=9;num>=1;num--)
+      {
+      //Check the possible numbers to input,
+      //records in array Count
       int Count[11];
       int ia;
       ia=(blankPosition/12);
@@ -310,17 +275,8 @@ bool Sudoku::Solve()
 
       if(Count[num+1]!=1)
       {
+        //input numbers
         setElement(blankPosition,num);
-     /* int ii; ii=0;
-     
-      for(j=0;j<sudokuSize;j++){
-        cout<<setw(4)<<mapIn[j];
-        ii++;
-        if(ii==12){
-          cout<<'\n';ii=0;}
-      }
-      cout<<endl;
-*/
         if(Solve()){
           return true;}
         setElement(blankPosition,0);
@@ -329,7 +285,6 @@ bool Sudoku::Solve()
    }else{
     for(int num=1;num<=9;num++)
     {
-    //  if(num==9) ++ansCount;
       int Count[11];
       int ia;
       ia=(blankPosition/12);
