@@ -79,7 +79,7 @@ void Sudoku::ReadIn()
 
   for(int i=0;i<sudokuSize;i++){
     cin>>mapIn[i];
-    testMulti[sudokuSize-i-1]=mapIn[i];
+    testMulti[i]=mapIn[i];
   }
   cout<<endl;
 
@@ -103,7 +103,6 @@ bool Sudoku::checkUnity(int a[],int b)
       return false;
     }
   }
- // cout<<"What"<<endl;
   return true;  
 }
 int * Sudoku::insPossible(int blank)//Check Possible Ans for blanks
@@ -225,7 +224,7 @@ bool Sudoku::Solve()
   {
     if(Correct())
     {/*
-  i    cout<<1<<endl;
+      cout<<1<<endl;
       int ii; ii=0;
       for(j=0;j<sudokuSize;j++){
         cout<<mapIn[j]<<" ";
@@ -241,11 +240,11 @@ bool Sudoku::Solve()
       }}
        ++passCount;
       if(passCount<2){
-      Solve();cout<<"one"<<endl;
+      Solve();
       
       int c;c=0;
       for(int i=0;i<sudokuSize;i++){
-        if(mapIn[i]==mapAnswer[sudokuSize-1-i]){
+        if(mapIn[i]==mapAnswer[i]){
           c++;
         }
       }
@@ -259,6 +258,7 @@ bool Sudoku::Solve()
             cout<<'\n';ii=0;}
         }
         cout<<endl;
+        return true;
       }else{
         cout<<2<<endl;
         return true;
@@ -269,25 +269,14 @@ bool Sudoku::Solve()
     // return true; 
     }
     else
-    {/*
-      int ii; ii=0;
-
-      for(j=0;j<sudokuSize;j++){
-        cout<<setw(4)<<mapIn[j];
-        ii++;
-        if(ii==12){
-          cout<<'\n';ii=0;}
-      }
-      cout<<",,,,"<<endl;*/
-    if(passCount==2)
-   cout<<0<<"here"<<passCount<<endl;
+    {
       return false;
     }
   }
   else
   { 
 
-   if(passCount==1){
+  if(passCount>=1){
 
     for(int num=9;num>=1;num--)
     {
@@ -337,17 +326,7 @@ bool Sudoku::Solve()
       if(Count[num+1]!=1)
       {
         setElement(blankPosition,num);
-     /* int ii; ii=0;
-
-      for(j=0;j<sudokuSize;j++){
-        cout<<setw(4)<<mapIn[j];
-        ii++;
-        if(ii==12){
-          cout<<'\n';ii=0;}
-      }
-      cout<<endl;
-*/
-        if(Solve()){
+       if(Solve()){
           return true;}
         setElement(blankPosition,0);
       }
