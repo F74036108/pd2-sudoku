@@ -6,7 +6,6 @@ using namespace std;
 Sudoku::Sudoku()
 {
   passCount=0;
-  ansCount=0;
   for(int i=0;i<sudokuSize;i++){
    
     mapIn[i]=0;
