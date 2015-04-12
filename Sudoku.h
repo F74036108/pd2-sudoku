@@ -6,7 +6,6 @@ public:
   void ReadIn();
   void cloneMap(const int map[]);
   bool checkUnity(int *,int);
-  int * insPossible(int);
   void setElement(int , int);
   int getZero();
   int checkDark();
@@ -16,8 +15,8 @@ public:
 private:
   int mapIn[sudokuSize];
   int testMulti[sudokuSize];
-  int exclude[11];
   int passCount;
+  int ansCount;
 //  int Count[11];
 //static  int mapQue[sudokuSize];
   int mapAns[sudokuSize];
